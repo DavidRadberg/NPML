@@ -1,12 +1,20 @@
 from abc import ABC, abstractmethod
 import numpy as np
 import logging
+from .activation import Activation
 
 
 class Layer(ABC):
-    def __init__(self, input_size: int, output_size: int) -> None:
-        self.input_size = input_size
+    input_size: int
+    output_size: int
+    activation: Activation
+
+    def __init__(self, output_size: int, activation: Activation) -> None:
         self.output_size = output_size
+        self.activation = activation
+
+    def random_init(self, intput_size: int):
+        self.input_size = intput_size
 
     @abstractmethod
     def forward_pass(self, x: np.ndarray) -> np.ndarray:
