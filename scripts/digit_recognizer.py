@@ -7,7 +7,7 @@ logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
 def main():
     loader = KaggleDatasetLoader()
-    path = loader.download("digit-recognizer")
+    path = loader.download("digit-recognizer", "data/")
     dataset = DigRecDataSet(path, 0.1)
     dataset.train.plot()
 

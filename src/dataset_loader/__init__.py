@@ -5,5 +5,5 @@ from pathlib import Path
 
 class DatasetLoader(ABC):
     @abstractmethod
-    def download(self, name: str) -> Path:
+    def download(self, name: str, path: str) -> Path:
         pass

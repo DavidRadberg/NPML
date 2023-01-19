@@ -8,19 +8,16 @@ import os
 import logging
 
 
-DATA_PATH = "data/"
-
-
 class KaggleDatasetLoader(DatasetLoader):
-    def download(self, name: str) -> Path:
-        output_path = Path(DATA_PATH + name)
-        zip_name = Path(DATA_PATH + name + ".zip")
+    def download(self, name: str, path: str) -> Path:
+        output_path = Path(path + name)
+        zip_name = Path(path + name + ".zip")
 
         if not os.path.exists(output_path):
             logging.info(f"Downloading {name} dataset...")
             api = KaggleApi()
             api.authenticate()
-            api.competition_download_files(name, path=DATA_PATH)
+            api.competition_download_files(name, path=path)
 
             logging.info("Unzipping...")
 

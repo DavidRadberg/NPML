@@ -35,7 +35,6 @@ class DigRecDataSet(Dataset):
     def __init__(self, path: Path, test_split: float) -> None:
         data = np.array(read_csv(path))
         np.random.shuffle(data)
-        m_test = int(test_split * data.shape[0])
-        m_test = data.shape[0] - 3
+        m_test = max(int(test_split * data.shape[0]), 1)
         self.test = dig_rec_data_factory(data[0:m_test])
         self.train = dig_rec_data_factory(data[m_test:])
