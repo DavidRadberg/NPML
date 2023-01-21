@@ -12,8 +12,8 @@ IMG_SIZE = 28
 
 class DigRecData(Data):
     def plot(self) -> None:
-        idx = random.randint(0, self.X.shape[1] - 1)
-        img = np.reshape(self.X.T[idx], (IMG_SIZE, IMG_SIZE))
+        X, _ = self.get_example()
+        img = np.reshape(X, (IMG_SIZE, IMG_SIZE))
         imshow(img, cmap="gray")
         show()
 

@@ -4,7 +4,7 @@ import numpy as np
 
 
 class Model:
-    layers: List[Layer]
+    layers: List[Layer] = []
 
     def __init__(self, input_size: int) -> None:
         self.input_size = input_size

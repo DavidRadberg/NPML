@@ -1,7 +1,7 @@
 .PHONY: setup clean test check
 
 test:
-	python -m pytest -ra
+	python -m pytest -ra -s
 
 setup: requirements.txt
 	pip install -r requirements.txt

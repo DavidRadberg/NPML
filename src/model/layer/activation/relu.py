@@ -1,12 +1,10 @@
-from abc import ABC, abstractmethod
+from . import Activation
 import numpy as np
 
 
-class Activation(ABC):
-    @abstractmethod
+class Relu(Activation):
     def apply(self, x: np.ndarray) -> np.ndarray:
-        pass
+        return np.maximum(x, 0)
 
-    @abstractmethod
     def derivative(self, x: np.ndarray) -> np.ndarray:
-        pass
+        return x > 0.0
