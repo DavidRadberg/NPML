@@ -35,7 +35,7 @@ def test_run_model_single(dig_rec: DigRecDataSet):
 def test_run_model(dig_rec: DigRecDataSet):
     X, Y = dig_rec.train.X, dig_rec.train.Y
     model = Model(len(X))
-    model.add_layer(RandomLayer(20, Relu()))
-    model.add_layer(RandomLayer(len(Y), Relu()))
+    model.add_layer(RandomLayer(20, Relu))
+    model.add_layer(RandomLayer(len(Y), Relu))
     output = model.run(X)
     assert output.shape == Y.shape

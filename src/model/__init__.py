@@ -19,7 +19,10 @@ class Model:
         layer.random_init(self.get_output_size())
         self.layers.append(layer)
 
-    def run(self, x: np.ndarray):
+    def run(self, X: np.ndarray):
         for layer in self.layers:
-            x = layer.forward_pass(x)
-        return x
+            X = layer.forward_pass(X)
+        return X
+
+    def gradiend_descent(self, X: np.ndarray, Y: np.ndarray, alpha: float):
+        prediction = self.run(X)

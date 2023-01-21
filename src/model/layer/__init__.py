@@ -2,14 +2,15 @@ from abc import ABC, abstractmethod
 import numpy as np
 import logging
 from .activation import Activation
+from typing import Type
 
 
 class Layer(ABC):
     input_size: int
     output_size: int
-    activation: Activation
+    activation: Type[Activation]
 
-    def __init__(self, output_size: int, activation: Activation) -> None:
+    def __init__(self, output_size: int, activation: Type[Activation]) -> None:
         self.output_size = output_size
         self.activation = activation
 
