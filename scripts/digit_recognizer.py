@@ -17,14 +17,15 @@ def main():
 
     input_size, output_size = dataset.train.shape()
     model = Model(input_size, SquaredCost)
-    model.add_layer(FullyConnectedLayer(10, Relu))
-    model.add_layer(FullyConnectedLayer(output_size, SoftMax))
+    reg_lambda = 0.01
+    model.add_layer(FullyConnectedLayer(50, Relu, SquaredCost, reg_lambda))
+    model.add_layer(FullyConnectedLayer(output_size, SoftMax, SquaredCost, reg_lambda))
 
     for i in range(10000):
         model.gradiend_descent(dataset.train.X, dataset.train.Y, 0.1)
-        pred = model.predict(dataset.test.X)
 
         if i % 10 == 0:
+            pred = model.predict(dataset.test.X)
             accuracy = dataset.evaluate(pred)
             print(f"accuracy {accuracy} at epoch {i}")
 

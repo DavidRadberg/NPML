@@ -12,3 +12,6 @@ class RandomLayer(Layer):
         return np.random.uniform(
             low=-1.0, high=1.0, size=(self.input_size, dZ.shape[1])
         )
+
+    def print(self):
+        print("Random Layer")

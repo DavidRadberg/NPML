@@ -16,7 +16,7 @@ def test_relu():
 
 
 def test_softmax():
-    input = np.array([[-0.2, -0.4, 1.0], [2.0, -2.0, 1.2]])
+    input = np.array([[0.0, -0.4, 1.0], [20, -20, 1.2]])
     expected_sum = np.array([1.0, 1.0, 1.0])
     output = SoftMax.apply(input)
     out_sum = np.sum(output, 0)

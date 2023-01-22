@@ -9,4 +9,4 @@ class Relu(Activation):
 
     @classmethod
     def derivative(cls, Z: np.ndarray) -> np.ndarray:
-        return Z > 0.0
+        return Z > 0

@@ -29,7 +29,7 @@ def dig_rec_data_factory(data: np.ndarray) -> DigRecData:
     data = data.T
     Y = np.array([label_to_y(d) for d in data[0]]).T
     X = data[1:]
-    X = X / X.max()
+    X = X / float(X.max())
     return DigRecData(X, Y)
 
 

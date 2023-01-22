@@ -4,9 +4,9 @@ import numpy as np
 
 class SquaredCost(CostFunction):
     @classmethod
-    def cost(cls, Y: np.ndarray, pred: np.ndarray) -> np.ndarray:
-        return np.square(Y - pred)
+    def cost(cls, delta: np.ndarray) -> np.ndarray:
+        return np.square(delta) / 2
 
     @classmethod
-    def deriv(cls, Y: np.ndarray, pred: np.ndarray) -> np.ndarray:
-        return pred - Y
+    def deriv(cls, delta: np.ndarray) -> np.ndarray:
+        return delta

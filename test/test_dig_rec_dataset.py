@@ -22,8 +22,8 @@ def dig_rec() -> DigRecDataSet:
 def model(dig_rec: DigRecDataSet) -> Model:
     X, Y = dig_rec.train.X, dig_rec.train.Y
     model = Model(len(X), SquaredCost)
-    model.add_layer(FullyConnectedLayer(20, Relu))
-    model.add_layer(FullyConnectedLayer(len(Y), SoftMax))
+    model.add_layer(FullyConnectedLayer(20, Relu, SquaredCost, 0.01))
+    model.add_layer(FullyConnectedLayer(len(Y), SoftMax, SquaredCost, 0.01))
     return model
 
 

@@ -38,6 +38,10 @@ class Model:
 
     def gradiend_descent(self, X: np.ndarray, Y: np.ndarray, alpha: float):
         prediction = self.run(X)
-        dz = self.cost_function.deriv(Y, prediction)
+        dz = self.cost_function.deriv(prediction - Y)
         for layer in reversed(self.layers):
             dz = layer.back_propagation(dz, alpha)
+
+    def summary(self):
+        for layer in self.layers:
+            layer.print()
