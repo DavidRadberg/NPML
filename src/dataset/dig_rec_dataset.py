@@ -3,7 +3,7 @@ from pathlib import Path
 from pandas import read_csv  # type: ignore
 import numpy as np
 from matplotlib.pyplot import imshow, show, title  # type: ignore
-import random
+import logging
 
 
 NUM_CLASSES = 10
@@ -12,9 +12,10 @@ IMG_SIZE = 28
 
 class DigRecData(Data):
     def plot(self) -> None:
-        X, _ = self.get_example()
+        X, Y = self.get_example()
         img = np.reshape(X, (IMG_SIZE, IMG_SIZE))
         imshow(img, cmap="gray")
+        logging.info(f"Correct label is {np.argmax(Y)}")
         show()
 
 
@@ -28,6 +29,7 @@ def dig_rec_data_factory(data: np.ndarray) -> DigRecData:
     data = data.T
     Y = np.array([label_to_y(d) for d in data[0]]).T
     X = data[1:]
+    X = X / X.max()
     return DigRecData(X, Y)
 
 

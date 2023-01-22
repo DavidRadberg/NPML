@@ -22,6 +22,9 @@ class Data:
         y = np.reshape(self.Y.T[idx], (2, -1))
         return x, y
 
+    def shape(self) -> Tuple[int, int]:
+        return len(self.X), len(self.Y)
+
 
 class Dataset(ABC):
     train: Data

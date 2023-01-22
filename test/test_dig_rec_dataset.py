@@ -3,7 +3,9 @@ from src.dataset.dig_rec_dataset import DigRecDataSet
 from pathlib import Path
 from src.model import Model
 from src.model.layer.random_layer import RandomLayer
+from src.model.layer.fully_connected_layer import FullyConnectedLayer
 from src.model.layer.activation.relu import Relu
+from src.model.layer.activation.soft_max import SoftMax
 from src.model.cost_function.squared_cost import SquaredCost
 
 CSV_PATH = Path("test/data/digit-recognizer/train.csv")
@@ -20,8 +22,8 @@ def dig_rec() -> DigRecDataSet:
 def model(dig_rec: DigRecDataSet) -> Model:
     X, Y = dig_rec.train.X, dig_rec.train.Y
     model = Model(len(X), SquaredCost)
-    model.add_layer(RandomLayer(20, Relu))
-    model.add_layer(RandomLayer(len(Y), Relu))
+    model.add_layer(FullyConnectedLayer(20, Relu))
+    model.add_layer(FullyConnectedLayer(len(Y), SoftMax))
     return model
 
 
