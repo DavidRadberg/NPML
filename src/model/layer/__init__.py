@@ -22,7 +22,7 @@ class Layer(ABC):
         pass
 
     @abstractmethod
-    def back_propagation(self, dz: np.ndarray) -> np.ndarray:
+    def back_propagation(self, dz: np.ndarray, alpha: float) -> np.ndarray:
         pass
 
     def print(self) -> None:

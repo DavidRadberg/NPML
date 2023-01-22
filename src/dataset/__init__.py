@@ -30,3 +30,7 @@ class Dataset(ABC):
     @abstractmethod
     def __init__(self, path: Path, test_split: float) -> None:
         pass
+
+    @abstractmethod
+    def evaluate(self, prediction: np.ndarray) -> float:
+        pass

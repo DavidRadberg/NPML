@@ -38,3 +38,10 @@ class DigRecDataSet(Dataset):
         m_test = max(int(test_split * data.shape[0]), 1)
         self.test = dig_rec_data_factory(data[0:m_test])
         self.train = dig_rec_data_factory(data[m_test:])
+
+    def evaluate(self, prediction: np.ndarray) -> float:
+        n_correct = 0
+        for y, p in zip(self.test.Y.T, prediction.T):
+            if np.all(y == p):
+                n_correct += 1
+        return n_correct / len(prediction.T)
