@@ -14,7 +14,6 @@ def main():
     loader = KaggleDatasetLoader()
     path = loader.download("digit-recognizer", "data/")
     dataset = DigRecDataSet(path, 0.1)
-    dataset.train.plot()
 
     input_size, output_size = dataset.train.shape()
     model = Model(input_size, SquaredCost)
