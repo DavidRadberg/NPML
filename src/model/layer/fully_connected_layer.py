@@ -22,16 +22,18 @@ class FullyConnectedLayer(Layer):
         return self.activation.apply(self.Z)
 
     def back_propagation(self, dZ: np.ndarray, alpha: float) -> np.ndarray:
-        dZ = dZ * self.activation.derivative(self.Z)
+        dZ = np.multiply(dZ, self.activation.derivative(self.Z))
         m = dZ.shape[1]
         reg_W = self.reg_lambda * self.regulizer.deriv(self.W)
-        reg_b = self.reg_lambda * self.regulizer.deriv(self.b)
         dW: np.ndarray = 1 / m * dZ.dot(self.A.T)
-        db: np.ndarray = 1 / m * np.sum(dZ)
+        db: np.ndarray = 1 / m * np.sum(dZ, axis=1).reshape(-1, 1)
+        dW = np.clip(dW, -0.5, 0.5)
+        db = np.clip(db, -0.5, 0.5)
+        dz = self.W.T.dot(dZ)
         self.W = self.W - dW * alpha - reg_W
-        self.b = self.b - db * alpha - reg_b
+        self.b = self.b - db * alpha
 
-        return self.W.T.dot(dZ)
+        return dz
 
     def print(self) -> None:
         info("Fully connected Layer")

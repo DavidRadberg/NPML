@@ -16,9 +16,17 @@ def test_relu():
 
 
 def test_softmax():
-    input = np.array([[0.0, -0.4, 1.0], [20, -20, 1.2]])
+    input = np.array([[0.0, 1.0, 2.0], [200000000, -20, 1.2], [2.0, 2.0, 2.0]]).T
     expected_sum = np.array([1.0, 1.0, 1.0])
+
+    s1 = np.exp(0) + np.exp(1) + np.exp(2)
+    expected_output = np.array(
+        [[1 / s1, np.e / s1, np.exp(2) / s1], [1.0, 0.0, 0.0], [1 / 3, 1 / 3, 1 / 3]]
+    ).T
     output = SoftMax.apply(input)
+    print(output.T)
+    print(expected_output.T)
     out_sum = np.sum(output, 0)
+    assert np.allclose(output, expected_output)
     assert np.allclose(out_sum, expected_sum)
     assert SoftMax.derivative(input) == 1.0

@@ -18,7 +18,7 @@ def main():
     input_size, output_size = dataset.train.shape()
     model = Model(input_size, SquaredCost)
     reg_lambda = 0.01
-    model.add_layer(FullyConnectedLayer(50, Relu, SquaredCost, reg_lambda))
+    model.add_layer(FullyConnectedLayer(20, Relu, SquaredCost, 0.01))
     model.add_layer(FullyConnectedLayer(output_size, SoftMax, SquaredCost, reg_lambda))
 
     for i in range(10000):
