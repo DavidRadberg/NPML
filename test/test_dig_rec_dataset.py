@@ -37,7 +37,7 @@ def test_shape(dig_rec: DigRecDataSet):
 
 def test_predict(dig_rec: DigRecDataSet, model: Model):
     X, Y = dig_rec.test.X, dig_rec.test.Y
-    output = model.predict(X)
+    output = model.run(X)
     assert output.shape == Y.shape
     dig_rec.evaluate(output)
 

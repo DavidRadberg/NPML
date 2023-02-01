@@ -11,6 +11,7 @@ class Model:
 
     def __init__(self, input_size: int, cost_function: Type[CostFunction]) -> None:
         self.input_size = input_size
+        self.layers = []
         self.cost_function = cost_function
 
     def get_output_size(self):
@@ -27,14 +28,6 @@ class Model:
         for layer in self.layers:
             X = layer.forward_pass(X)
         return X
-
-    def predict(self, X: np.ndarray) -> np.ndarray:
-        Y = self.run(X)
-        pred = np.zeros(Y.shape)
-        idx = np.argmax(Y, 0)
-        for p, i in zip(pred.T, idx):
-            p[i] = 1
-        return pred
 
     def gradiend_descent(self, X: np.ndarray, Y: np.ndarray, alpha: float):
         prediction = self.run(X)

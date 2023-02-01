@@ -18,14 +18,14 @@ def main():
     input_size, output_size = dataset.train.shape()
     model = Model(input_size, SquaredCost)
     reg_lambda = 0.01
-    model.add_layer(FullyConnectedLayer(20, Relu, SquaredCost, 0.01))
+    model.add_layer(FullyConnectedLayer(20, Relu, SquaredCost, reg_lambda))
     model.add_layer(FullyConnectedLayer(output_size, SoftMax, SquaredCost, reg_lambda))
 
     for i in range(10000):
         model.gradiend_descent(dataset.train.X, dataset.train.Y, 0.1)
 
         if i % 10 == 0:
-            pred = model.predict(dataset.test.X)
+            pred = model.run(dataset.test.X)
             accuracy = dataset.evaluate(pred)
             print(f"accuracy {accuracy} at epoch {i}")
 

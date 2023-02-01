@@ -41,7 +41,12 @@ class DigRecDataSet(Dataset):
         self.test = dig_rec_data_factory(data[0:m_test])
         self.train = dig_rec_data_factory(data[m_test:])
 
-    def evaluate(self, prediction: np.ndarray) -> float:
+    def evaluate(self, Y: np.ndarray) -> float:
+        prediction = np.zeros(Y.shape)
+        idx = np.argmax(Y, 0)
+        for p, i in zip(prediction.T, idx):
+            p[i] = 1
+
         n_correct = 0
         for y, p in zip(self.test.Y.T, prediction.T):
             if np.all(y == p):

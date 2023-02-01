@@ -36,6 +36,6 @@ class FullyConnectedLayer(Layer):
         return dz
 
     def print(self) -> None:
-        info("Fully connected Layer")
+        info(f"Fully connected Layer with size {self.input_size}, {self.output_size}")
         info(f"Max, min of W is {self.W.max()}, {self.W.min()}")
         info(f"Max, min of b is {self.b.max()}, {self.b.min()}")

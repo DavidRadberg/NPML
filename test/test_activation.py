@@ -24,8 +24,7 @@ def test_softmax():
         [[1 / s1, np.e / s1, np.exp(2) / s1], [1.0, 0.0, 0.0], [1 / 3, 1 / 3, 1 / 3]]
     ).T
     output = SoftMax.apply(input)
-    print(output.T)
-    print(expected_output.T)
+
     out_sum = np.sum(output, 0)
     assert np.allclose(output, expected_output)
     assert np.allclose(out_sum, expected_sum)

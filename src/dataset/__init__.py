@@ -35,5 +35,5 @@ class Dataset(ABC):
         pass
 
     @abstractmethod
-    def evaluate(self, prediction: np.ndarray) -> float:
+    def evaluate(self, Y: np.ndarray) -> float:
         pass
