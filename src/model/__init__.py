@@ -9,7 +9,11 @@ class Model:
     layers: List[Layer] = []
     cost_function: Type[CostFunction]
 
-    def __init__(self, input_size: int, cost_function: Type[CostFunction]) -> None:
+    def __init__(
+        self,
+        input_size: int,
+        cost_function: Type[CostFunction],
+    ) -> None:
         self.input_size = input_size
         self.layers = []
         self.cost_function = cost_function
@@ -29,11 +33,11 @@ class Model:
             X = layer.forward_pass(X)
         return X
 
-    def gradiend_descent(self, X: np.ndarray, Y: np.ndarray, alpha: float):
+    def gradiend_descent(self, X: np.ndarray, Y: np.ndarray):
         prediction = self.run(X)
         dz = self.cost_function.deriv(prediction - Y)
         for layer in reversed(self.layers):
-            dz = layer.back_propagation(dz, alpha)
+            dz = layer.back_propagation(dz)
 
     def summary(self):
         for layer in self.layers:

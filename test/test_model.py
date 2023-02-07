@@ -4,20 +4,22 @@ from src.dataset.trivial_dataset import TrivialDataset
 from src.model.cost_function.squared_cost import SquaredCost
 from src.model.layer.fully_connected_layer import FullyConnectedLayer
 from src.model.layer.activation.soft_max import SoftMax
-import logging
-
-logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
+from src.model.layer.optimizer.linear_optimizer import LinearOptimizer
 
 
 def test_model_on_trivial_data():
     dataset = TrivialDataset(None, None)
     input_size, output_size = dataset.train.shape()
     model = Model(input_size, SquaredCost)
-    model.add_layer(FullyConnectedLayer(output_size, SoftMax, SquaredCost, 0.01))
+    model.add_layer(
+        FullyConnectedLayer(
+            output_size, SoftMax, SquaredCost, 0.01, LinearOptimizer(0.1)
+        )
+    )
     model.summary()
 
-    for i in range(400):
-        model.gradiend_descent(dataset.train.X, dataset.train.Y, 0.1)
+    for _ in range(400):
+        model.gradiend_descent(dataset.train.X, dataset.train.Y)
 
     layer = model.layers[0]
     W = layer.W

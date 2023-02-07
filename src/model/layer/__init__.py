@@ -4,6 +4,7 @@ import logging
 from .activation import Activation
 from typing import Type
 from src.model.cost_function import CostFunction
+from .optimizer import Optimizer
 
 
 class Layer(ABC):
@@ -19,11 +20,13 @@ class Layer(ABC):
         activation: Type[Activation],
         regulizer: Type[CostFunction],
         reg_lambda: float,
+        optimizer: Optimizer,
     ) -> None:
         self.output_size = output_size
         self.activation = activation
         self.regulizer = regulizer
         self.reg_lambda = reg_lambda
+        self.optimizer = optimizer
 
     def random_init(self, intput_size: int):
         self.input_size = intput_size
@@ -33,7 +36,7 @@ class Layer(ABC):
         pass
 
     @abstractmethod
-    def back_propagation(self, dZ: np.ndarray, alpha: float) -> np.ndarray:
+    def back_propagation(self, dZ: np.ndarray) -> np.ndarray:
         pass
 
     @abstractmethod

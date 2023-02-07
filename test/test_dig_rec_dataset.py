@@ -7,6 +7,7 @@ from src.model.layer.fully_connected_layer import FullyConnectedLayer
 from src.model.layer.activation.relu import Relu
 from src.model.layer.activation.soft_max import SoftMax
 from src.model.cost_function.squared_cost import SquaredCost
+from src.model.layer.optimizer.linear_optimizer import LinearOptimizer
 
 CSV_PATH = Path("test/data/digit-recognizer/train.csv")
 
@@ -22,8 +23,12 @@ def dig_rec() -> DigRecDataSet:
 def model(dig_rec: DigRecDataSet) -> Model:
     X, Y = dig_rec.train.X, dig_rec.train.Y
     model = Model(len(X), SquaredCost)
-    model.add_layer(FullyConnectedLayer(20, Relu, SquaredCost, 0.01))
-    model.add_layer(FullyConnectedLayer(len(Y), SoftMax, SquaredCost, 0.01))
+    model.add_layer(
+        FullyConnectedLayer(20, Relu, SquaredCost, 0.01, LinearOptimizer(0.1))
+    )
+    model.add_layer(
+        FullyConnectedLayer(len(Y), SoftMax, SquaredCost, 0.01, LinearOptimizer(0.1))
+    )
     return model
 
 
@@ -44,4 +49,4 @@ def test_predict(dig_rec: DigRecDataSet, model: Model):
 
 def test_gradient_descent(dig_rec: DigRecDataSet, model: Model):
     X, Y = dig_rec.train.X, dig_rec.train.Y
-    model.gradiend_descent(X, Y, 0.1)
+    model.gradiend_descent(X, Y)
