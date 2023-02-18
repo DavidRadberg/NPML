@@ -1,17 +1,17 @@
 from dataclasses import dataclass
-from pandas.core.frame import DataFrame  # type: ignore
 from abc import ABC, abstractmethod
 from pathlib import Path
 import numpy as np
 import logging
 import random
-from typing import Tuple
+from typing import Tuple, List
 
 
 @dataclass
 class Data:
     X: np.ndarray
     Y: np.ndarray
+    i: int = 0
 
     def plot(self) -> None:
         logging.info("Plotting not supported")
@@ -22,8 +22,16 @@ class Data:
         y = np.reshape(self.Y.T[idx], (2, -1))
         return x, y
 
-    def shape(self) -> Tuple[int, int]:
-        return len(self.X), len(self.Y)
+    def get_batch(self, size: int) -> Tuple[np.ndarray, np.ndarray]:
+        m = self.X.shape[-1]
+        self.i = self.i % m
+
+        if self.i + size > m:
+            self.i = m - size - 1
+
+        out = (self.X.T[self.i : self.i + size].T, self.Y.T[self.i : self.i + size].T)
+        self.i += size
+        return out
 
 
 class Dataset(ABC):
@@ -37,3 +45,12 @@ class Dataset(ABC):
     @abstractmethod
     def evaluate(self, Y: np.ndarray) -> float:
         pass
+
+    def input_shape(self) -> List[int]:
+        return list(self.train.X.shape[0:-1])
+
+    def output_shape(self) -> List[int]:
+        return list(self.train.Y.shape[0:-1])
+
+    def get_training_batch(self, size: int) -> Tuple[np.ndarray, np.ndarray]:
+        return self.train.get_batch(size)

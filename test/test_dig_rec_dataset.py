@@ -21,23 +21,28 @@ def dig_rec() -> DigRecDataSet:
 
 @pytest.fixture
 def model(dig_rec: DigRecDataSet) -> Model:
-    X, Y = dig_rec.train.X, dig_rec.train.Y
-    model = Model(len(X), SquaredCost)
+    input_shape = dig_rec.input_shape()
+    output_shape = dig_rec.output_shape()
+
+    model = Model(input_shape, SquaredCost)
     model.add_layer(
-        FullyConnectedLayer(20, Relu, SquaredCost, 0.01, LinearOptimizer(0.1))
+        FullyConnectedLayer([20], Relu, SquaredCost, 0.01, LinearOptimizer(0.1))
     )
     model.add_layer(
-        FullyConnectedLayer(len(Y), SoftMax, SquaredCost, 0.01, LinearOptimizer(0.1))
+        FullyConnectedLayer(
+            output_shape, SoftMax, SquaredCost, 0.01, LinearOptimizer(0.1)
+        )
     )
     return model
 
 
 def test_shape(dig_rec: DigRecDataSet):
     assert dig_rec.train.X.shape[0] == dig_rec.test.X.shape[0]
+    assert dig_rec.train.X.shape[1] == dig_rec.test.X.shape[1]
     assert dig_rec.train.Y.shape[0] == dig_rec.test.Y.shape[0]
-    assert dig_rec.train.X.shape[1] == dig_rec.train.Y.shape[1]
-    assert dig_rec.test.X.shape[1] == dig_rec.test.Y.shape[1]
-    assert dig_rec.train.X.shape[1] > dig_rec.test.X.shape[1]
+    assert dig_rec.train.X.shape[3] == dig_rec.train.Y.shape[1]
+    assert dig_rec.test.X.shape[3] == dig_rec.test.Y.shape[1]
+    assert dig_rec.train.X.shape[3] > dig_rec.test.X.shape[3]
 
 
 def test_predict(dig_rec: DigRecDataSet, model: Model):

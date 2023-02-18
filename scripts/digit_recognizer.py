@@ -6,7 +6,7 @@ from src.model.cost_function.squared_cost import SquaredCost
 from src.model.layer.fully_connected_layer import FullyConnectedLayer
 from src.model.layer.activation.relu import Relu
 from src.model.layer.activation.soft_max import SoftMax
-from src.model.layer.optimizer.linear_optimizer import LinearOptimizer
+from src.model.layer.conv2 import Conv2D
 from src.model.layer.optimizer.adam import Adam
 
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
@@ -17,21 +17,27 @@ def main():
     path = loader.download("digit-recognizer", "data/")
     dataset = DigRecDataSet(path, 0.1)
 
-    input_size, output_size = dataset.train.shape()
-    model = Model(input_size, SquaredCost)
+    input_shape = dataset.input_shape()
+    output_shape = dataset.output_shape()
+
+    model = Model(input_shape, SquaredCost)
     reg_lambda = 0.01
-    model.add_layer(FullyConnectedLayer(20, Relu, SquaredCost, reg_lambda, Adam()))
+
+    model.add_layer(Conv2D(5, 3, Relu, SquaredCost, reg_lambda, Adam()))
+    model.add_layer(Conv2D(5, 3, Relu, SquaredCost, reg_lambda, Adam()))
+    # model.add_layer(Conv2D(5, 1, Relu, SquaredCost, reg_lambda, Adam()))
     model.add_layer(
-        FullyConnectedLayer(output_size, SoftMax, SquaredCost, reg_lambda, Adam())
+        FullyConnectedLayer(output_shape, SoftMax, SquaredCost, reg_lambda, Adam())
     )
 
     for i in range(10000):
-        model.gradiend_descent(dataset.train.X, dataset.train.Y)
-
         if i % 10 == 0:
             pred = model.run(dataset.test.X)
             accuracy = dataset.evaluate(pred)
-            print(f"accuracy {accuracy} after epoch {i}")
+            print(f"accuracy {accuracy} at epoch {i}")
+
+        X, Y = dataset.get_training_batch(1000)
+        model.gradiend_descent(X, Y)
 
 
 if __name__ == "__main__":

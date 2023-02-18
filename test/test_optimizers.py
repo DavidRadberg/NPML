@@ -9,9 +9,9 @@ import numpy as np
 
 def test_linear_optimizer() -> None:
     layer = FullyConnectedLayer(
-        2, LinearActivation, SquaredCost, 0.0, LinearOptimizer(0.1)
+        [2], LinearActivation, SquaredCost, 0.0, LinearOptimizer(0.1)
     )
-    layer.random_init(1)
+    layer.random_init([1])
 
     W_org = np.copy(layer.W)
 
@@ -23,8 +23,8 @@ def test_linear_optimizer() -> None:
 
 
 def test_adam() -> None:
-    layer = FullyConnectedLayer(2, LinearActivation, SquaredCost, 0.0, Adam())
-    layer.random_init(1)
+    layer = FullyConnectedLayer([2], LinearActivation, SquaredCost, 0.0, Adam())
+    layer.random_init([1])
 
     W_org = np.copy(layer.W)
 

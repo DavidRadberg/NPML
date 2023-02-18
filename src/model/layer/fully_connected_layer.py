@@ -1,6 +1,10 @@
 from . import Layer
 import numpy as np
 from logging import info
+from .activation import Activation
+from typing import Type, List
+from src.model.cost_function import CostFunction
+from .optimizer import Optimizer
 
 
 class FullyConnectedLayer(Layer):
@@ -9,31 +13,57 @@ class FullyConnectedLayer(Layer):
     A: np.ndarray
     Z: np.ndarray
 
-    def random_init(self, input_size: int):
-        scale = np.sqrt(1.0 / input_size)
-        self.W = np.random.normal(scale=scale, size=(self.output_size, input_size))
-        self.b = np.random.normal(scale=scale, size=(self.output_size, 1))
+    def __init__(
+        self,
+        output_shape: List[int],
+        activation: Type[Activation],
+        regulizer: Type[CostFunction],
+        reg_lambda: float,
+        optimizer: Optimizer,
+    ) -> None:
+        self.output_shape = output_shape
+        self.activation = activation
+        self.regulizer = regulizer
+        self.reg_lambda = reg_lambda
+        self.optimizer = optimizer
 
-        super().random_init(input_size)
+    def random_init(self, input_shape: List[int]):
+        self.input_shape = input_shape
+        input_size = self.get_input_size()
+        output_size = self.get_output_size()
+        scale = np.sqrt(2.0 / input_size)
+
+        self.W = np.random.normal(scale=scale, size=(output_size, input_size))
+        self.b = np.random.normal(scale=scale, size=(output_size, 1))
 
     def forward_pass(self, x: np.ndarray) -> np.ndarray:
+        x = flatten(x)
+
         self.A = x
         self.Z = self.W.dot(x) + self.b
         return self.activation.apply(self.Z)
 
     def back_propagation(self, dZ: np.ndarray) -> np.ndarray:
+        dZ = flatten(dZ)
+
         dZ = np.multiply(dZ, self.activation.derivative(self.Z))
         m = dZ.shape[1]
         reg_W = self.reg_lambda * self.regulizer.deriv(self.W)
         dW: np.ndarray = dZ.dot(self.A.T) / m
         db: np.ndarray = np.sum(dZ, axis=1).reshape(-1, 1) / m
 
-        dz = self.W.T.dot(dZ)
+        dZ = self.W.T.dot(dZ)
         self.optimizer.step(self.W, self.b, dW, db, reg_W)
 
-        return dz
+        shape = self.input_shape.copy()
+        shape.append(-1)
+        return dZ.reshape(shape)
 
     def print(self) -> None:
-        info(f"Fully connected Layer with size {self.input_size}, {self.output_size}")
+        info(f"Fully connected Layer with size {self.input_shape}, {self.output_shape}")
         info(f"Max, min of W is {self.W.max()}, {self.W.min()}")
         info(f"Max, min of b is {self.b.max()}, {self.b.min()}")
+
+
+def flatten(A: np.ndarray) -> np.ndarray:
+    return A.reshape((-1, A.shape[-1]))

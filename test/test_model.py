@@ -9,11 +9,13 @@ from src.model.layer.optimizer.linear_optimizer import LinearOptimizer
 
 def test_model_on_trivial_data():
     dataset = TrivialDataset(None, None)
-    input_size, output_size = dataset.train.shape()
-    model = Model(input_size, SquaredCost)
+    input_shape = dataset.input_shape()
+    output_shape = dataset.output_shape()
+
+    model = Model(input_shape, SquaredCost)
     model.add_layer(
         FullyConnectedLayer(
-            output_size, SoftMax, SquaredCost, 0.01, LinearOptimizer(0.1)
+            output_shape, SoftMax, SquaredCost, 0.01, LinearOptimizer(0.1)
         )
     )
     model.summary()

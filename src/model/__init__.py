@@ -1,5 +1,5 @@
 from .layer import Layer
-from typing import List
+from typing import Tuple, List
 import numpy as np
 from .cost_function import CostFunction
 from typing import Type
@@ -11,21 +11,21 @@ class Model:
 
     def __init__(
         self,
-        input_size: int,
+        input_shape: List[int],
         cost_function: Type[CostFunction],
     ) -> None:
-        self.input_size = input_size
+        self.input_shape = input_shape
         self.layers = []
         self.cost_function = cost_function
 
-    def get_output_size(self):
+    def get_output_shape(self) -> List[int]:
         if len(self.layers) > 0:
-            return self.layers[-1].output_size
+            return self.layers[-1].output_shape
         else:
-            return self.input_size
+            return self.input_shape
 
     def add_layer(self, layer: Layer):
-        layer.random_init(self.get_output_size())
+        layer.random_init(self.get_output_shape())
         self.layers.append(layer)
 
     def run(self, X: np.ndarray) -> np.ndarray:

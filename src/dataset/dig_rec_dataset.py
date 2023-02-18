@@ -30,6 +30,7 @@ def dig_rec_data_factory(data: np.ndarray) -> DigRecData:
     Y = np.array([label_to_y(d) for d in data[0]]).T
     X = data[1:]
     X = X / float(X.max())
+    X = np.reshape(X, (IMG_SIZE, IMG_SIZE, 1, -1))
     return DigRecData(X, Y)
 
 
