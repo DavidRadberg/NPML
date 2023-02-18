@@ -35,20 +35,24 @@ class Conv2D(Layer):
         output_shape[2] = self.depth
         self.output_shape = output_shape
 
-        input_size = self.get_input_size()
-        scale = np.sqrt(2.0 / input_size)
+        w_scale = np.sqrt(2.0 / self.width)
         self.W = np.random.normal(
-            scale=scale, size=(self.width, self.width, input_shape[2], self.depth)
+            scale=w_scale, size=(self.width, self.width, input_shape[2], self.depth)
         )
-        self.b = np.random.normal(scale=scale, size=self.depth)
+        self.b = np.ones(self.depth) * 0.01
 
     def forward_pass(self, x: np.ndarray) -> np.ndarray:
         x = self.pad(x)
         self.A = x
 
         res = conv2d(x, self.W)
-        for d in range(self.depth):
-            res[:, :, d, :] += self.b[d]
+        """
+        TODO: Use bias.
+        Currently the bias degrades performance, so it has been disabled
+        Might be incorrecly implemented
+        """
+        # for d in range(self.depth):
+        #    res[:, :, d, :] += self.b[d]
 
         self.Z = res
         return self.activation.apply(res)
@@ -57,8 +61,6 @@ class Conv2D(Layer):
         dZ = np.multiply(dZ, self.activation.derivative(self.Z))
 
         m = dZ.shape[-1]
-        h = dZ.shape[0]
-        w = dZ.shape[1]
 
         dW = np.zeros(shape=self.W.shape)
         db = np.zeros(shape=self.b.shape)
@@ -71,16 +73,16 @@ class Conv2D(Layer):
             db[wd] = bsum
 
         dW = dW / m
-        db = db / (w * h * m)
+        db = db / m
 
         dZ = self.pad(dZ)
         reg_W = self.reg_lambda * self.regulizer.deriv(self.W)
 
+        W_t = self.W.copy()
         self.optimizer.step(self.W, self.b, dW, db, reg_W)
 
-        W_t = self.W.copy()
-        W_t = rotate_180(W_t)
         W_t = np.transpose(W_t, [0, 1, 3, 2])
+        dZ = rotate_180(dZ)
         return conv2d(dZ, W_t)
 
     def print(self) -> None:

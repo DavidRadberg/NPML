@@ -23,9 +23,8 @@ def main():
     model = Model(input_shape, SquaredCost)
     reg_lambda = 0.01
 
-    model.add_layer(Conv2D(5, 3, Relu, SquaredCost, reg_lambda, Adam()))
-    model.add_layer(Conv2D(5, 3, Relu, SquaredCost, reg_lambda, Adam()))
-    # model.add_layer(Conv2D(5, 1, Relu, SquaredCost, reg_lambda, Adam()))
+    model.add_layer(Conv2D(5, 1, Relu, SquaredCost, reg_lambda, Adam()))
+    model.add_layer(Conv2D(5, 1, Relu, SquaredCost, reg_lambda, Adam()))
     model.add_layer(
         FullyConnectedLayer(output_shape, SoftMax, SquaredCost, reg_lambda, Adam())
     )
