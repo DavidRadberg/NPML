@@ -25,6 +25,8 @@ def main():
 
     model.add_layer(Conv2D(5, 1, Relu, SquaredCost, reg_lambda, Adam()))
     model.add_layer(Conv2D(5, 1, Relu, SquaredCost, reg_lambda, Adam()))
+    model.add_layer(Conv2D(5, 1, Relu, SquaredCost, reg_lambda, Adam()))
+
     model.add_layer(
         FullyConnectedLayer(output_shape, SoftMax, SquaredCost, reg_lambda, Adam())
     )

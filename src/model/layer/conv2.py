@@ -46,13 +46,8 @@ class Conv2D(Layer):
         self.A = x
 
         res = conv2d(x, self.W)
-        """
-        TODO: Use bias.
-        Currently the bias degrades performance, so it has been disabled
-        Might be incorrecly implemented
-        """
-        # for d in range(self.depth):
-        #    res[:, :, d, :] += self.b[d]
+        for d in range(self.depth):
+            res[:, :, d, :] += self.b[d]
 
         self.Z = res
         return self.activation.apply(res)
@@ -82,7 +77,8 @@ class Conv2D(Layer):
         self.optimizer.step(self.W, self.b, dW, db, reg_W)
 
         W_t = np.transpose(W_t, [0, 1, 3, 2])
-        dZ = rotate_180(dZ)
+        W_t = rotate_180(W_t)
+
         return conv2d(dZ, W_t)
 
     def print(self) -> None:
