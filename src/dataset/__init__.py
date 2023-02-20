@@ -23,8 +23,11 @@ class Data:
         return x, y
 
     def get_batch(self, size: int) -> Tuple[np.ndarray, np.ndarray]:
+        if size == -1:
+            return self.X, self.Y
+
         m = self.X.shape[-1]
-        self.i = self.i % m
+        self.i = self.i % (m - 1)
 
         if self.i + size > m:
             self.i = m - size - 1
@@ -52,5 +55,5 @@ class Dataset(ABC):
     def output_shape(self) -> List[int]:
         return list(self.train.Y.shape[0:-1])
 
-    def get_training_batch(self, size: int) -> Tuple[np.ndarray, np.ndarray]:
+    def get_training_batch(self, size: int = -1) -> Tuple[np.ndarray, np.ndarray]:
         return self.train.get_batch(size)
