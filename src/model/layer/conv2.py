@@ -3,7 +3,7 @@ from .activation import Activation
 from typing import Type, List, Tuple
 from src.model.cost_function import CostFunction
 from .optimizer import Optimizer
-import logging
+from logging import info
 
 import numpy as np
 from src.operations.conv import conv2d, conv2d_sum
@@ -82,7 +82,10 @@ class Conv2D(Layer):
         return conv2d(dZ, W_t)
 
     def print(self) -> None:
-        logging.info("CNN Layer")
+        info("--Conv2D Layer--")
+        info(f"width {self.width}")
+        info(f"depth {self.depth}")
+        super().print()
 
     def pad(self, A: np.ndarray):
         pad_size = self.width // 2

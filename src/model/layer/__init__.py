@@ -4,6 +4,7 @@ from .activation import Activation
 from typing import Type, List
 from src.model.cost_function import CostFunction
 from functools import reduce
+import logging
 
 
 class Layer(ABC):
@@ -31,6 +32,6 @@ class Layer(ABC):
     def back_propagation(self, dZ: np.ndarray) -> np.ndarray:
         pass
 
-    @abstractmethod
     def print(self) -> None:
-        pass
+        logging.info(f"input shape {self.input_shape}")
+        logging.info(f"output shape {self.output_shape}")

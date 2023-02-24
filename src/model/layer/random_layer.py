@@ -24,4 +24,5 @@ class RandomLayer(Layer):
         return np.random.normal(scale=1.0, size=shape)
 
     def print(self):
-        print("Random Layer")
+        print("--Random Layer--")
+        super().print()

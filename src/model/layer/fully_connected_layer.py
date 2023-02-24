@@ -60,9 +60,8 @@ class FullyConnectedLayer(Layer):
         return dZ.reshape(shape)
 
     def print(self) -> None:
-        info(f"Fully connected Layer with size {self.input_shape}, {self.output_shape}")
-        info(f"Max, min of W is {self.W.max()}, {self.W.min()}")
-        info(f"Max, min of b is {self.b.max()}, {self.b.min()}")
+        info(f"--Fully Connected Layer--")
+        super().print()
 
 
 def flatten(A: np.ndarray) -> np.ndarray:

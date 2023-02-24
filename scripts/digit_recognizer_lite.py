@@ -24,15 +24,15 @@ def main():
     model = Model(input_shape, SquaredCost)
     reg_lambda = 0.01
 
-    model.add_layer(Conv2D(5, 12, Relu, SquaredCost, reg_lambda, Adam()))
+    model.add_layer(Conv2D(3, 3, Relu, SquaredCost, reg_lambda, Adam()))
     model.add_layer(MaxPool2D(2))
 
-    model.add_layer(Conv2D(5, 24, Relu, SquaredCost, reg_lambda, Adam()))
+    model.add_layer(Conv2D(3, 8, Relu, SquaredCost, reg_lambda, Adam()))
     model.add_layer(MaxPool2D(2))
 
-    model.add_layer(Conv2D(5, 48, Relu, SquaredCost, reg_lambda, Adam()))
+    model.add_layer(Conv2D(3, 24, Relu, SquaredCost, reg_lambda, Adam()))
 
-    model.add_layer(FullyConnectedLayer([112], Relu, SquaredCost, reg_lambda, Adam()))
+    model.add_layer(FullyConnectedLayer([50], Relu, SquaredCost, reg_lambda, Adam()))
 
     model.add_layer(
         FullyConnectedLayer(output_shape, SoftMax, SquaredCost, reg_lambda, Adam())
@@ -41,12 +41,12 @@ def main():
     model.summary()
 
     for i in range(10000):
-        if i % 1 == 0:
+        if i % 10 == 0:
             pred = model.run(dataset.test.X)
             accuracy = dataset.evaluate(pred)
             logging.info(f"accuracy {accuracy} at iteration {i}")
 
-        X, Y = dataset.get_training_batch(4000)
+        X, Y = dataset.get_training_batch(1000)
         model.gradiend_descent(X, Y)
 
 
